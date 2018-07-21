@@ -1,0 +1,9 @@
+<h4>Exchanges:</h4>
+
+<ul>
+  <%= for exchange_currency <- @currency.exchange_currencies do %>
+    <li>
+      <%= link exchange_currency.exchange.name, to: exchange_path(@conn, :show, exchange_currency.exchange) %>
+    </li>
+  <% end %>
+</ul>

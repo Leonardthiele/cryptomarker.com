@@ -1,0 +1,18 @@
+.navbar-dark {
+  font-weight: 300;
+  background-color: rgba(#000, 0.8);
+
+  a {
+    transition: color 0.3s ease;
+  }
+
+  .navbar-brand {
+    color: $navbar-dark-color;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+  }
+
+  input {
+    background-color: #444;
+  }
+}

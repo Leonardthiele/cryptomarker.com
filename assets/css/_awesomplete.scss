@@ -1,0 +1,40 @@
+@import "node_modules/awesomplete/awesomplete.base";
+
+.awesomplete > ul {
+	// margin: .2em 0 0;
+	background: $dropdown-bg;
+	border: $dropdown-border-width solid $dropdown-border-color;
+	text-shadow: none;
+}
+
+.awesomplete > ul > li {
+	position: relative;
+	padding: 0.5rem 1.5rem;
+	cursor: pointer;
+
+	&:hover {
+		background: hsl(200, 40%, 80%);
+		color: black;
+	}
+
+	&[aria-selected="true"] {
+		background: theme-color("primary");
+		color: white;
+	}
+}
+
+.awesomplete mark {
+	padding: 0;
+	background: inherit;
+	color: inherit;
+}
+
+.awesomplete li:hover mark {
+	background: inherit;
+	color: inherit;
+}
+
+// .awesomplete li[aria-selected="true"] mark {
+// 	background: hsl(86, 100%, 21%);
+// 	color: inherit;
+// }

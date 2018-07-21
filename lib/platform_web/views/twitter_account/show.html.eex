@@ -1,0 +1,9 @@
+<%#= debug ExTwitter.user_timeline(count: 10, user_id: @twitter_account.twitter_user_id, tweet_mode: "extended") %>
+
+<div class="row">
+  <div class="col-6">
+    <%= for twitter_status <- @twitter_statuses do %>
+      <%= render TwitterStatusView, "_twitter_status.html", Map.put(assigns, :twitter_status, twitter_status) %>
+    <% end %>
+  </div>
+</div>

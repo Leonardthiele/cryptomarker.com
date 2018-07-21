@@ -1,0 +1,49 @@
+<!-- div class="card mb-2 <%= if (@twitter_status.retweets_count + @twitter_status.favorites_count) > 40 do %>border-danger<% end %>" -->
+<div class="card mb-2">
+  <div class="card-header">
+    <%= for twitter_account <- @twitter_status.twitter_accounts do %>
+      <div>
+        <%= link "#{twitter_account.currency.name} (#{twitter_account.currency.symbol})", to: currency_path(@conn, :show, twitter_account.currency) %>
+        <span class="float-right">
+          Price:
+          <span class="text-info">
+            <%= if twitter_account.currency.price_usd < 1 do %>
+              <%= number_to_currency(twitter_account.currency.price_usd, precision: 4) %>
+            <% else %>
+              <%= number_to_currency(twitter_account.currency.price_usd, precision: 2) %>
+            <% end %>
+          </span>
+          1h: <%= PlatformWeb.CurrencyView.colorize_percentage(twitter_account.currency.percent_change_1h) %>
+          24h: <%= PlatformWeb.CurrencyView.colorize_percentage(twitter_account.currency.percent_change_24h) %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <p>
+      <%= link "@#{@twitter_status.screen_name}", to: "https://twitter.com/#{@twitter_status.screen_name}", target: "_blank" %>:
+      <%= raw auto_link(@twitter_status.text) %>
+    </p>
+    <%= if @twitter_status.media_url_https do %>
+      <p><%= link img_tag((@twitter_status.media_url_https <> ":small"), class: "img-fluid"), to: @twitter_status.media_url_https, target: "_blank" %></p>
+    <% end %>
+
+    <small class="text-muted">
+      <time class="timeago" datetime="<%= @twitter_status.inserted_at |> Calendar.DateTime.shift_zone!("Europe/Berlin") |> Calendar.DateTime.Format.rfc3339(0) %>">
+        <%= @twitter_status.inserted_at |> Calendar.DateTime.shift_zone!("Europe/Berlin") |> Calendar.DateTime.Format.httpdate %>
+      </time>
+    </small>
+
+    <hr>
+
+      <div>
+        Retweets: <strong><%= @twitter_status.retweets_count %></strong>
+        Likes: <strong><%= @twitter_status.favorites_count %></strong>
+          <%= if can?(@conn, :edit, @twitter_status) do %>
+            <span style="float: right;">
+              <%= link "Unimportant", to: twitter_status_path(@conn, :update, @twitter_status, toggle: "unimportant"), method: :put, data: [confirm: "Mark tweet as unimportant?"], class: "text-danger" %>
+            </span>
+          <% end %>
+      </div>
+  </div>
+</div>

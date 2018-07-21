@@ -1,0 +1,5 @@
+<div>
+  <%= link "Update completeness scores", to: developer_dashboard_path(@conn, :update, target: "completeness_scores"), method: :put, class: "btn btn-primary" %>
+  <%= link "Purge currencies not in Bittrex", to: developer_dashboard_path(@conn, :update, target: "clean_not_bittrex"), method: :put, class: "btn btn-primary" %>
+</div>
+

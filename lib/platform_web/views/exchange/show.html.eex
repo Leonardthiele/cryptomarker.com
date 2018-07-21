@@ -1,0 +1,70 @@
+<div class="h4">
+  <%= fa_icon("globe fa-fw text-muted") %> Website: <%= link @exchange.website_url, to: @exchange.website_url, target: "_blank" %>
+</div>
+<div class="h4">
+  <%= fa_icon("home fa-fw text-muted") %> Country: <%= @exchange.country %>
+</div><br>
+
+<hr>
+<%= if @exchange.logo do %>
+  <%= img_tag upload_path(ExchangeLogoUploader.url({@exchange.logo, @exchange}, :icon64x64)), width: 64, height: 64 %>
+<% end %>
+<hr>
+
+<%#= link "Test event", to: "#", id: "socket_test", class: "btn btn-success" %>
+
+<h3>Traded Currencies (<%= length(@exchange.exchange_currencies) %>)</h3>
+
+<%= tabs_filter(@conn, :view, [nil: "Active", inactive: "Inactive"]) %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Currency</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exchange_currency <- @exchange.exchange_currencies do %>
+    <tr>
+      <td>
+        <%= if exchange_currency.currency.logo do %>
+          <%= img_tag upload_path(CurrencyLogoUploader.url({exchange_currency.currency.logo, exchange_currency.currency}, :icon32x32)), width: 32, height: 32 %>
+        <% end %>
+        <%= link exchange_currency.currency.name, to: currency_path(@conn, :show, exchange_currency.currency) %>
+        <span class="text-muted">(<%= exchange_currency.currency.symbol %>)</span>
+      </td>
+      <td><%= exchange_currency.active %></td>
+
+      <td class="text-right">
+      <%= if can?(@conn, :edit, exchange_currency) do %>
+        <span><%= link "Edit", to: exchange_exchange_currency_path(@conn, :edit, @exchange, exchange_currency), class: "btn btn-default btn-xs" %></span>
+      <% end %>
+      <%= if can?(@conn, :delete, exchange_currency) do %>
+        <span><%= link "Delete", to: exchange_exchange_currency_path(@conn, :delete, @exchange, exchange_currency), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= if can?(@conn, :new, ExchangeCurrency) do %>
+  <%= if @exchange.auto_managed do %>
+    <div class="alert alert-info">
+      This exchange is automanaged. You can't add new currencies manually.
+    </div>
+  <% else %>
+    <span><%= link "New Exchange currency", to: exchange_exchange_currency_path(@conn, :new, @exchange) %></span>
+  <% end %>
+<% end %>
+
+<br>
+<br>
+
+<%= if can?(@conn, :edit, Exchange) do %>
+  <span><%= link "Edit", to: exchange_path(@conn, :edit, @exchange) %></span>
+<% end %>
+<%= if can?(@conn, :index, Exchange) do %>
+  <span><%= link "Back", to: exchange_path(@conn, :index) %></span>
+<% end %>
+

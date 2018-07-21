@@ -1,0 +1,5 @@
+<%= render "_form.html", Map.put(assigns, :action, currency_twitter_account_path(@conn, :create, @currency)) %>
+
+<%= if can?(@conn, :new, TwitterAccount) do %>
+  <span><%= link "Back", to: currency_twitter_account_path(@conn, :index, @currency) %></span>
+<% end %>

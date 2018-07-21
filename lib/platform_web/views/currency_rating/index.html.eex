@@ -1,0 +1,11 @@
+<%= tabs_filter(@conn, :view, [nil: "Favorites", all: "All"]) %>
+
+<table class="table">
+  <%= for currency_rating <- @currency_ratings do %>
+    <tr>
+      <td><%= currency_rating.currency.name %></td>
+      <td><%= currency_rating.rating %></td>
+    </tr>
+  <% end  %>
+</table>
+

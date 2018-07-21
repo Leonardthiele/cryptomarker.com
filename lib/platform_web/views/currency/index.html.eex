@@ -1,0 +1,51 @@
+<p>
+  Total market cap: <%= number_to_currency(@total_market_usd, precision: 0) %>
+</p>
+
+<%= tabs_filter(@conn, :view, [nil: "All", bittrex: "Bittrex", bittrex_vol: "Bittrex Volume"]) do %>
+  <div class="btn-group ml-auto" role="group" aria-label="First group">
+    <%= if @conn.params["completeness"] do %>
+      <%= link "Completeness", to: Phoenix.Controller.current_path(@conn, Map.drop(@conn.params, ["completeness"])), class: "btn btn-secondary active" %>
+    <% else %>
+      <%= link "Completeness", to: Phoenix.Controller.current_path(@conn, Map.put(@conn.params, "completeness", "true")), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+  <div class="btn-group ml-2" role="group" aria-label="First group">
+    <%= link "1h", to: Phoenix.Controller.current_path(@conn, Map.put(@conn.params, "duration", "1h")), class: "btn btn-secondary #{if(@conn.params["duration"] == "1h", do: "active")}" %>
+    <%= link "24h", to: Phoenix.Controller.current_path(@conn, Map.drop(@conn.params, ["duration"])), class: "btn btn-secondary #{if(!@conn.params["duration"], do: "active")}" %>
+  </div>
+<% end %>
+
+<%= if @conn.params["completeness"] do %>
+  <%= progressbar(@avg_completeness_score) %>
+<% end %>
+
+<table class="table table-responsive table-th-sticky">
+  <thead>
+    <tr>
+      <th>★</th>
+      <th><%= sortable_link(@conn, "Name", :name) %></th>
+      <th><%= sortable_link(@conn, "Price", :price_usd) %></th>
+      <%= if @conn.params["duration"] == "1h" do %>
+        <th class="text-right"><%= sortable_link(@conn, "% change (1h)", :percent_change_1h) %></th>
+      <% else %>
+        <th class="text-right"><%= sortable_link(@conn, "% change (24h)", :percent_change_24h) %></th>
+      <% end %>
+      <%= if @conn.params["completeness"] do %>
+        <th><%= sortable_link(@conn, "Score", :completeness_score) %></th>
+      <% else %>
+        <th class="text-right"><%= sortable_link(@conn, "Market cap", :market_cap_usd) %></th>
+        <th class="text-right"><%= sortable_link(@conn, "Volume (24h)", :volume_24h_usd) %></th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for currency <- @currencies do %>
+    <%= render "_currency.html", Map.put(assigns, :currency, currency) %>
+  <% end %>
+  </tbody>
+</table>
+<%= if can?(@conn, :new, Currency) do %>
+  <span><%= link "New Currency", to: currency_path(@conn, :new) %></span>
+<% end %>

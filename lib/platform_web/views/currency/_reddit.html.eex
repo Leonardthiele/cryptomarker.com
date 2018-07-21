@@ -1,0 +1,17 @@
+<div>
+  <%= fa_icon("reddit fa-fw") %>
+  <%= link @reddit.name, to: "https://www.reddit.com/r/#{@reddit.name}/", target: "_blank" %>
+
+  <span class="text-muted">
+    (<%= number_to_delimited(@reddit.subscribers_count, precision: 0) %> Subscribers)
+  </span>
+
+  <span class="float-right">
+    <%= if can?(@conn, :edit, @reddit) do %>
+      <%= dropdown_options(right: true) do %>
+        <%#= link "Edit", to: currency_reddit_path(@conn, :edit, @currency, @reddit), class: "dropdown-item" %>
+        <%= link "Delete", to: currency_reddit_path(@conn, :delete, @currency, @reddit), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+      <% end %>
+    <% end %>
+  </span>
+</div>

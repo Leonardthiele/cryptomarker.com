@@ -1,0 +1,17 @@
+<div>
+  <%= fa_icon("github fa-fw") %>
+  <%= link @github_repo.full_name, to: "https://github.com/#{@github_repo.full_name}", target: "_blank" %>
+
+  <span class="text-muted">
+    (<%= number_to_delimited(@github_repo.stars_count, precision: 0) %> Stars)
+  </span>
+
+  <span class="float-right">
+    <%= if can?(@conn, :edit, @github_repo) do %>
+      <%= dropdown_options(right: true) do %>
+        <%#= link "Edit", to: currency_github_repo_path(@conn, :edit, @currency, @github_repo), class: "dropdown-item" %>
+        <%= link "Delete", to: currency_github_repo_path(@conn, :delete, @currency, @github_repo), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+      <% end %>
+    <% end %>
+  </span>
+</div>

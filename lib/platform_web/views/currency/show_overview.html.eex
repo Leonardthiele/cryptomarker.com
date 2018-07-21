@@ -1,0 +1,128 @@
+
+<div class="row">
+  <div class="col-sm-8">
+    <p>
+      <span class="h1">$<%= @currency.price_usd %> (<%= colorize_percentage(@currency.percent_change_1h) %>)</span><br>
+      <small class="text-muted"><%= @currency.price_btc %> BTC</small>
+    </p>
+
+    <div class="row">
+      <div class="col-12">
+
+        <p>
+          <%= if @currency.short_summary && @currency.short_summary != "" do %>
+            <%= @currency.short_summary %><br>
+          <% end %>
+          <%= if @currency.asset_parent do %>
+            <%= @currency.name %> is an asset of <%= link @currency.asset_parent.name, to: currency_path(@conn, :show, @currency.asset_parent) %>.
+          <% end %>
+
+          <%#= debug Platform.Core.CurrencyCompletenessScore.conditions(@currency) %>
+        </p>
+
+        <div class="row" class="col-12">
+          <div class="col-md-3">
+            <dt><span class="h6">Total Marketcap</span></dt>
+            <dd><span class="h4"><%= number_to_currency(@currency.market_cap_usd, precision: 0) %></span></dd>
+          </div>
+          <div class="col-md-3">
+            <dt><span class="h6">24h-Volume</span></dt>
+            <dd><span class="h4"><%= number_to_currency(@currency.volume_24h_usd, precision: 0) %></span></dd>
+          </div>
+          <div class="col-md-3">
+            <dt><span class="h6">Available Supply</span></dt>
+            <dd><span class="h4"><%= number_to_delimited(@currency.available_supply, precision: 0) %></span></dd>
+          </div>
+          <div class="col-md-3">
+            <dt><span class="h6">Percent change (24h)</span></dt>
+            <dd><span class="h4"><%= colorize_percentage(@currency.percent_change_24h) %></span></dd>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div id="chart" data-currency-id="<%= @currency.id %>" style="height: 400px; min-width: 310px"></div>
+    <p>
+      <%= if can?(@conn, :new, Candle) do %>
+        <%= link "Fetch history", to: currency_candle_path(@conn, :create, @currency), method: :post, class: "btn btn-primary" %>
+      <% end %>
+      <%= if can?(@conn, :index, Candle) do %>
+        <%= link "Show candles", to: currency_candle_path(@conn, :index, @currency), class: "btn btn-secondary" %>
+      <% end %>
+    </p>
+    <br>
+  </div>
+  <div class="col-sm-4">
+    <div class="card mb-2">
+      <%= progressbar(@currency.completeness_score, "Complete") %>
+      <div class="card-body">
+        <div>
+          <%= fa_icon("signal fa-fw") %> <%= link "Coin Market Cap", to: "https://coinmarketcap.com/currencies/#{@currency.slug}/", target: "_blank" %>
+        </div>
+        <%= for currency_link <- @currency.currency_links do %>
+          <%= render "_currency_link.html", Map.put(assigns, :currency_link, currency_link) %>
+        <% end %>
+        <%= for github_repo <- @currency.github_repos do %>
+          <%= render "_github_repo.html", Map.put(assigns, :github_repo, github_repo) %>
+        <% end %>
+        <%= for reddit <- @currency.reddits do %>
+          <%= render "_reddit.html", Map.put(assigns, :reddit, reddit) %>
+        <% end %>
+
+        <%= for twitter_account <- @currency.twitter_accounts do %>
+          <div>
+            <%= fa_icon("twitter fa-fw text-muted") %>
+            <%= link twitter_account.name, to: currency_twitter_account_path(@conn, :show, @currency, twitter_account), target: "_blank" %>
+
+            <span class="text-muted">
+              (<%= number_to_delimited(twitter_account.followers_count, precision: 0) %> Followers)
+            </span>
+            <%= if can?(@conn, :delete, twitter_account) do %>
+              <span class="float-right">
+                <%= dropdown_options(right: true) do %>
+                  <%= link "Delete", to: currency_twitter_account_path(@conn, :delete, @currency, twitter_account), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+                <% end %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <small>
+          <%= if can?(@conn, :new, CurrencyLink) do %>
+            <%= link "Add link", to: currency_currency_link_path(@conn, :new, @currency), class: "text-muted" %>
+          <% end %>
+          <%= if can?(@conn, :new, TwitterAccount) do %>
+            |
+            <%= link "Add twitter", to: currency_twitter_account_path(@conn, :new, @currency), class: "text-muted" %>
+          <% end %>
+          <%= if can?(@conn, :new, GithubRepo) do %>
+            |
+            <%= link "Add github", to: currency_github_repo_path(@conn, :new, @currency), class: "text-muted" %>
+          <% end %>
+          <%= if can?(@conn, :new, Reddit) do %>
+            |
+            <%= link "Add reddit", to: currency_reddit_path(@conn, :new, @currency), class: "text-muted" %>
+          <% end %>
+        </small>
+      </div>
+    </div>
+    <span class="h5">Twitter</span>
+    <%= for twitter_status <- @twitter_statuses do %>
+      <%= render "_twitter_status.html", Map.put(assigns, :twitter_status, twitter_status) %>
+    <% end %>
+
+  </div>
+</div>
+
+<div>
+<%= if can?(@conn, :edit, @currency) do %>
+  <%= link "Edit", to: currency_path(@conn, :edit, @currency), class: "btn btn-primary" %>
+<% end %>
+<%= if can?(@conn, :index, @currency) do %>
+  <%= link "Back", to: currency_path(@conn, :index), class: "btn btn-secondary" %>
+<% end %>
+<%= if can?(@conn, :delete, @currency) do %>
+  <%= link "Delete", to: currency_path(@conn, :delete, @currency), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger float-right" %>
+<% end %>
+</div>

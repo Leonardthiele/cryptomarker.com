@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-6">
+    <%= render "_twitter_status.html", Map.put(assigns, :twitter_status, @twitter_status) %>
+  </div>
+</div>
+
+Rating: <%= @twitter_status.rating %>
+
+<p>
+  <%= link "Rating -1", to: twitter_status_path(@conn, :update, @twitter_status, rating: "-1"), method: :put, class: "btn btn-danger" %>
+  <%= link "Rating 0", to: twitter_status_path(@conn, :update, @twitter_status, rating: "0"), method: :put, class: "btn btn-secondary" %>
+  <%= link "Rating 1", to: twitter_status_path(@conn, :update, @twitter_status, rating: "1"), method: :put, class: "btn btn-success" %>
+</p><br>
+Unimportant: <%= @twitter_status.unimportant %>
+<p>
+  <%= link "Toggle Unimportant", to: twitter_status_path(@conn, :update, @twitter_status, toggle: "unimportant"), method: :put, class: "btn btn-danger" %>
+</p>

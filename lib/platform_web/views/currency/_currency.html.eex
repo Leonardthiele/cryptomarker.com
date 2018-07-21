@@ -1,0 +1,61 @@
+<tr class="<%= get_rating_th(get_rating(@currency.currency_ratings)) %>">
+  <td>
+    <%= if current_user(@conn) do %>
+      <%= dropdown_options(icon: content_tag(:span, (if get_rating(@currency.currency_ratings), do: "★", else: "☆"), class: get_rating_class(get_rating(@currency.currency_ratings)))) do %>
+        <%= link "Favorite", to: user_currency_rating_path(@conn, :create, current_user(@conn), currency_id: @currency, rating: "1"), method: :post, class: "dropdown-item #{get_rating_class(1)}" %>
+        <%= link "Uninteresting", to: user_currency_rating_path(@conn, :create, current_user(@conn), currency_id: @currency, rating: "-1"), method: :post, class: "dropdown-item #{get_rating_class(-1)}" %>
+        <%= link "Scam", to: user_currency_rating_path(@conn, :create, current_user(@conn), currency_id: @currency, rating: "-2"), method: :post, class: "dropdown-item #{get_rating_class(-2)}" %>
+        <%= if get_rating(@currency.currency_ratings) do %>
+          <div class="dropdown-divider"></div>
+          <%= link "Remove", to: user_currency_rating_path(@conn, :delete, current_user(@conn), @currency), method: :delete, class: "dropdown-item" %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <a class="text-muted" data-container="body" data-toggle="popover" data-placement="right" data-content="Please log in to set favorites.">☆</a>
+    <% end %>
+  </td>
+  <td>
+    <%= if @currency.logo do %>
+      <%= img_tag upload_path(CurrencyLogoUploader.url({@currency.logo, @currency}, :icon32x32)), width: 16, height: 16 %>
+    <% end %>
+    <%= link @currency.name, to: currency_path(@conn, :show, @currency) %>
+    <span class="text-muted">(<%= @currency.symbol %>)</span><br>
+    <%= if @currency.short_summary && @currency.short_summary != "" do %>
+      <small class="text-muted"><%= @currency.short_summary %></small>
+    <% end %>
+  </td>
+  <td class="<%= colorize_class(if(@conn.params["duration"] == "1h", do: @currency.percent_change_1h, else: @currency.percent_change_24h)) %>">
+    <%= if @currency.price_usd < 1 do %>
+      <%= number_to_currency(@currency.price_usd, precision: 4) %>
+    <% else %>
+      <%= number_to_currency(@currency.price_usd, precision: 2) %>
+    <% end %>
+  </td>
+  <%= if @conn.params["duration"] == "1h" do %>
+    <td class="text-right"><%= colorize_percentage(@currency.percent_change_1h) %></td>
+  <% else %>
+    <td class="text-right"><%= colorize_percentage(@currency.percent_change_24h) %></td>
+  <% end %>
+  <%= if @conn.params["completeness"] do %>
+    <td><%= progressbar(@currency.completeness_score) %></td>
+  <% else %>
+    <td class="text-right">
+      <%= if (@currency.market_cap_usd / 1_000_000) < 10 do %>
+        <%= number_to_currency(@currency.market_cap_usd / 1_000_000, precision: 1) %><span class="text-muted">M</span>
+      <% else %>
+        <%= number_to_currency(@currency.market_cap_usd / 1_000_000, precision: 0) %><span class="text-muted">M</span>
+      <% end %>
+    </td>
+    <td class="text-right">
+      <%= number_to_currency(@currency.volume_24h_usd, precision: 0) %>
+    </td>
+  <% end %>
+  <td class="text-right">
+    <%= if can?(@conn, :edit, @currency) do %>
+      <%= dropdown_options(right: true) do %>
+        <%= link "Edit", to: currency_path(@conn, :edit, @currency), class: "dropdown-item" %>
+        <%= link "Delete", to: currency_path(@conn, :delete, @currency), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

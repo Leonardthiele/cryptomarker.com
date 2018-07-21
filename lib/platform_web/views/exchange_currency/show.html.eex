@@ -1,0 +1,21 @@
+<ul>
+
+  <li>
+    <strong>Symbol:</strong>
+    <%= @exchange_currency.symbol %>
+  </li>
+
+  <li>
+    <strong>Currency:</strong>
+    <%= @exchange_currency.currency_id %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @exchange_currency.active %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exchange_exchange_currency_path(@conn, :edit, @exchange, @exchange_currency) %></span>
+<span><%= link "Back", to: exchange_exchange_currency_path(@conn, :index, @exchange) %></span>

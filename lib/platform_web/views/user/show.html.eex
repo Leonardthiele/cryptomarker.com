@@ -1,0 +1,6 @@
+
+<ul>
+  <%= for currency_rating <- @user.currency_ratings do %>
+    <li><%= link currency_rating.currency.name, to: currency_path(@conn, :show, currency_rating.currency) %></li>
+  <% end %>
+</ul>

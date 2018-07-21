@@ -1,0 +1,31 @@
+<!-- div class="card mb-2 <%= if (@twitter_status.retweets_count + @twitter_status.favorites_count) > 40 do %>border-danger<% end %>" -->
+<div class="card mb-2">
+
+  <div class="card-body">
+    <small class="text-muted">
+      <time class="timeago" datetime="<%= @twitter_status.inserted_at |> Calendar.DateTime.shift_zone!("Europe/Berlin") |> Calendar.DateTime.Format.rfc3339(0) %>">
+        <%= @twitter_status.inserted_at |> Calendar.DateTime.shift_zone!("Europe/Berlin") |> Calendar.DateTime.Format.httpdate %>
+      </time>
+    </small>
+
+    <p>
+      <%= link "@#{@twitter_status.screen_name}", to: "https://twitter.com/#{@twitter_status.screen_name}", target: "_blank" %>:
+      <%= raw text_to_html(@twitter_status.text) %>
+    </p>
+    <%= if @twitter_status.media_url_https do %>
+      <p><%= link img_tag((@twitter_status.media_url_https <> ":small"), class: "img-fluid"), to: @twitter_status.media_url_https, target: "_blank" %></p>
+    <% end %>
+
+    <hr>
+
+      <div>
+        Retweets: <strong><%= @twitter_status.retweets_count %></strong>
+        Likes: <strong><%= @twitter_status.favorites_count %></strong>
+        <%= if can?(@conn, :edit, @twitter_status) do %>
+          <span style="float: right;">
+            <%= link "Unimportant", to: twitter_status_path(@conn, :update, @twitter_status, toggle: "unimportant"), method: :put, data: [confirm: "Mark tweet as unimportant?"], class: "text-danger" %>
+          </span>
+        <% end %>
+      </div>
+  </div>
+</div>

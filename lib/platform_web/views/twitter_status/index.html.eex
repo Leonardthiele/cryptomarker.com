@@ -1,0 +1,15 @@
+<%#= pagination_links @conn, @page %>
+<div class="row">
+  <div class="col-6">
+    <h2>Last updates</h2>
+    <%= for twitter_status <- @last_twitter_statuses do %>
+      <%= render "_twitter_status.html", Map.put(assigns, :twitter_status, twitter_status) %>
+    <% end %>
+  </div>
+  <div class="col-6">
+    <h2>Top Tweets (2h)</h2>
+    <%= for twitter_status <- @top_twitter_statuses do %>
+      <%= render "_twitter_status.html", Map.put(assigns, :twitter_status, twitter_status) %>
+    <% end %>
+  </div>
+</div>

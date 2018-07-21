@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CryptoMarker</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+  <body>
+    <%= render "_navigation.html", conn: @conn %>
+    <div class="container">
+      <%= render "_flash_messages.html", conn: @conn %>
+      <main role="main">
+        <nav class="breadcrumb mt-2">
+          <% breadcrumbs = [{"Home", "/"}] ++ PlatformWeb.BreadcrumbHelper.encode(page(@conn)) %>
+          <%= for {{name, path}, index} <- Enum.with_index(breadcrumbs) do %>
+            <%= if length(breadcrumbs) == index + 1 do %>
+              <span class="breadcrumb-item active"><%= name %></span>
+            <% else %>
+              <%= link name, to: path || "", class: "breadcrumb-item" %>
+            <% end %>
+          <% end %>
+        </nav>
+
+        <%= if !page(@conn)[:no_header] do %>
+          <%= content_tag :h1, page(@conn)[:headline] || page(@conn)[:title], class: "page-header" %>
+        <% end %>
+
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div> <!-- /container -->
+  </body>
+</html>

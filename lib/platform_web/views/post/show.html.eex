@@ -1,0 +1,23 @@
+<div>
+  <main role="main">
+    <div class="row justify-content-md-center">
+      <div class="col-md-12 col-lg-10">
+        <div>
+          <div><%= @post.published_at %></div><br>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-md-center post">
+      <div class="col-md-12 col-lg-10 post-content">
+       <%= as_html(@post.content_markdown) %>
+      </div>
+    </div>
+  </main>
+  <%= if can?(@conn, :edit, @post) do %>
+    <span><%= link "Edit", to: post_path(@conn, :edit, @post), class: "btn btn-default btn-xs" %></span>
+  <% end %>
+  <%= if can?(@conn, :index, Post) do %>
+  <span><%= link "Back", to: post_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+  <% end %>
+</div>
+

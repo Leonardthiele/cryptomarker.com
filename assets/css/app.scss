@@ -1,0 +1,40 @@
+// Variables
+$font-family-sans-serif: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+
+$blue: #3468AE;
+
+$navbar-brand-font-size:            1rem;
+$navbar-dark-color: #aaa;
+$navbar-dark-hover-color: #fff;
+
+
+$breadcrumb-divider: "›";
+$breadcrumb-bg: inherit;
+$breadcrumb-padding-y: .30rem;
+$breadcrumb-padding-x: 0;
+$breadcrumb-active-color: #666;
+
+$nav-pills-link-active-color: #666;
+$nav-pills-link-active-bg: #e9ecef;
+
+$navbar-padding-y: 0.2rem;
+
+
+$table-accent-bg: #fbfbfb;
+
+$btn-font-weight: 300;
+// $card-cap-bg: #fff;
+
+$enable-rounded:           false;
+
+// Imports
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/font-awesome/scss/font-awesome";
+@import "awesomplete";
+@import "headroom";
+@import "breadcrumb";
+@import "chart";
+@import "navbar";
+@import "misc";
+
+// Only imports here. If it's not a component, put it in _misc.scss

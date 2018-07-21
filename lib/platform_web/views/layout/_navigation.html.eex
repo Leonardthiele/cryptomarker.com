@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top headroom" data-headroom-top>
+  <div class="container">
+    <%= link to: page_path(@conn, :index), class: "navbar-brand" do %>
+      <%= img_tag static_path(@conn, "/images/cryptomarker-brand.png"), width: 24, height: 24, alt: "CryptoMarker" %>
+    <% end %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <%= if Application.get_env(:platform, PlatformWeb.Endpoint)[:code_reloader] do %>
+        <a href="https://semaphoreci.com/workshops/cryptomarker" style="position: fixed; top: 0.65rem; right: 0.2rem;" target="_blank">
+          <img src="https://semaphoreci.com/api/v1/projects/2cf0d4c9-0990-4d62-8b60-b8d21e1b35a9/1475889/badge.svg">
+        </a>
+      <% end %>
+      <ul class="navbar-nav mr-auto">
+        <%= content_tag :li, class: "nav-item #{if(Enum.at(@conn.path_info, 0) == "currencies", do: " active")}" do %>
+          <%= link "Currencies", to: currency_path(@conn, :index), class: "nav-link" %>
+        <% end %>
+
+        <%= content_tag :li, class: "nav-item #{if(Enum.at(@conn.path_info, 0) == "exchanges", do: " active")}" do %>
+          <%= link "Exchanges", to: exchange_path(@conn, :index), class: "nav-link" %>
+        <% end %>
+
+        <%= content_tag :li, class: "nav-item #{if(Enum.at(@conn.path_info, 0) == "twitter_statuss", do: " active")}" do %>
+          <%= link "Twitter streams", to: twitter_status_path(@conn, :index), class: "nav-link" %>
+        <% end %>
+
+        <%= content_tag :li, class: "nav-item #{if(Enum.at(@conn.path_info, 0) == "users", do: " active")}" do %>
+          <%= link "Users", to: user_path(@conn, :index), class: "nav-link" %>
+        <% end %>
+      </ul>
+
+      <form class="form-inline">
+        <input id="currency-list" class="form-control mr-sm-2" type="text" placeholder="Select currency">
+      </form>
+
+      <ul class="navbar-nav">
+        <%= if current_user(@conn) do %>
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Account
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <span class="dropdown-header"><%= current_user(@conn).name %></span>
+              <div class="dropdown-divider"></div>
+              <%= link "Feedback", to: feedback_path(@conn, :index), class: "dropdown-item" %>
+              <%= link "Edit profile", to: user_path(@conn, :edit, current_user(@conn)), class: "dropdown-item" %>
+              <%= link "Developer Dashboard", to: developer_dashboard_path(@conn, :show), class: "dropdown-item text-success" %>
+              <div class="dropdown-divider"></div>
+              <%= link "Logout", to: auth_path(@conn, :delete), method: :delete, class: "dropdown-item" %>
+            </div>
+          </li>
+        <% else %>
+          <%= content_tag :li, class: "nav-item" do %>
+            <%= link "Sign up / Sign in", to: auth_path(@conn, :request, "github"), class: "nav-link" %>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

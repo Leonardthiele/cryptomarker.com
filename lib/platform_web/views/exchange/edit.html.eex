@@ -1,0 +1,5 @@
+<%= render "_form.html", Map.put(assigns, :action, exchange_path(@conn, :update, @exchange)) %>
+
+<%= if can?(@conn, :index, Exchange) do %>
+  <span><%= link "Back", to: exchange_path(@conn, :index) %></span>
+<% end %>

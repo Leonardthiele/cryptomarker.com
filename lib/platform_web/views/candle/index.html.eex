@@ -1,0 +1,29 @@
+<table class="table table-reponsive">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Close</th>
+      <th>Low</th>
+      <th>Volume to</th>
+      <th>Trades from</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <%= for candle <- @candles do %>
+      <tr>
+        <td>
+          <%= candle.time |> DateTime.from_unix! %><br>
+          <small class="text-muted">(<%= candle.time %>)</small>
+        </td>
+        <td><%= candle.open %></td>
+        <td><%= candle.high %></td>
+        <td><%= candle.close %></td>
+        <td><%= candle.low %></td>
+        <td><%= candle.volume_to %></td>
+        <td><%= candle.volume_from %></td>
+      </tr>
+  <% end %>
+</table>

@@ -1,0 +1,32 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Followers</th>
+      <th>Tweets</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for twitter_account <- @twitter_accounts do %>
+    <tr>
+      <td><%= img_tag twitter_account.image_url, class: "rounded-circle" %>
+      <td>
+        <%= link twitter_account.name, to: currency_twitter_account_path(@conn, :show, @currency, twitter_account) %><br>
+        @<%= twitter_account.screen_name %>
+      </td>
+      <td><%= number_to_delimited(twitter_account.followers_count, precision: 0) %></td>
+      <td><%= number_to_delimited(twitter_account.tweets_count, precision: 0) %></td>
+      <%= if can?(@conn, :delete, TwitterAccount) do %>
+        <td class="text-right">
+          <span><%= link "Delete", to: currency_twitter_account_path(@conn, :delete, @currency, twitter_account), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        </td>
+      <% end %>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= if can?(@conn, :new, TwitterAccount) do %>
+  <span><%= link "New Twitter account", to: currency_twitter_account_path(@conn, :new, @currency), class: "btn btn-primary" %></span>
+<% end %>

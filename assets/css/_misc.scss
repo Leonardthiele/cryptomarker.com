@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box; // 1
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #fbfbfb;
+}
+
+body {
+  padding-top: 2.6rem;
+}
+
+.page-header {
+  margin-bottom: 0.5em;
+}
+
+.table-th-sticky {
+  thead tr:nth-child(1) th{
+    background: white;
+    position: sticky;
+    top: -2px;
+    z-index: 10;
+  }
+}
+
+
+.dropdown-options {
+  color: #999;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.nav-pills {
+  background-color: lighten(#e9ecef, 6%);
+}
+
+
+.table {
+  tr.table-favorite {
+    background-color: #eefbf1;
+  }
+
+  tr.table-uninteresting {
+    color: lighten($body-color, 20%);
+    .text-danger, .text-success {
+      color: lighten($body-color, 20%) !important;
+    }
+  }
+
+  tr.table-scam {
+    color: lighten($body-color, 80%);
+    a, .text-danger, .text-success, .text-muted {
+      color: lighten($body-color, 80%) !important;
+    }
+  }
+}

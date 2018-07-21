@@ -1,0 +1,25 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+
+  <%= if length(Keyword.get_values(f.errors, :twitter_user_id)) > 0 do %>
+    <div class="alert alert-danger">This Twitter user doesn't exist.</div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :screen_name, class: "control-label" %>
+    <div class="input-group">
+      <span class="input-group-addon" id="btnGroupAddon">@</span>
+      <%= text_input f, :screen_name, class: "form-control", maxlength: 16 %>
+    </div>
+    <%= error_tag f, :screen_name %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

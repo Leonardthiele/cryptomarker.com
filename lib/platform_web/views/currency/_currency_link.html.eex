@@ -1,0 +1,22 @@
+<div>
+  <%= currency_link_icon(@currency_link) %>
+  <%= if @currency_link.not_found do %>
+    <span class="text-muted">
+      No <%= humanize(@currency_link.type) %>
+    </span>
+  <% else %>
+    <%= link humanize(@currency_link.type), to: @currency_link.url, target: "_blank" %>
+  <% end %>
+  <%= if @currency_link.title && @currency_link.title != "" do %>
+    <span class="text-muted">(<%= @currency_link.title %>)</span>
+  <% end %>
+
+  <span class="float-right">
+    <%= if can?(@conn, :edit, @currency_link) do %>
+      <%= dropdown_options(right: true) do %>
+        <%= link "Edit", to: currency_currency_link_path(@conn, :edit, @currency, @currency_link), class: "dropdown-item" %>
+        <%= link "Delete", to: currency_currency_link_path(@conn, :delete, @currency, @currency_link), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+      <% end %>
+    <% end %>
+  </span>
+</div>

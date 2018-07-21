@@ -1,0 +1,18 @@
+<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= input f, :name %>
+  <%= input f, :logo, as: :file_input %>
+  <%= input f, :country %>
+  <%= input f, :website_url %>
+  <%= input f, :volume_usd %>
+  <%= input f, :auto_managed %>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

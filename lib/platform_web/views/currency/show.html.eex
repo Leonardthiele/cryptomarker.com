@@ -1,0 +1,29 @@
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item  mr-auto">
+    <%= if @currency.logo do %>
+      <%= img_tag upload_path(CurrencyLogoUploader.url({@currency.logo, @currency}, :icon64x64)), width: 32, height: 32 %>
+    <% end %>
+    <span class="h2 font-weight-bold align-middle">
+      <%= @currency.name %>
+      <small class="text-muted"> (<%= @currency.symbol %>)</small>
+    </span>
+  </li>
+  <%= content_tag :li, class: "nav-item" do %>
+    <%= link "Overview", to: currency_path(@conn, :show, @currency), class: "nav-link #{if(is_nil(@conn.params["tab"]), do: "active")}" %>
+  <% end %>
+  <%= content_tag :li, class: "nav-item" do %>
+    <%= link "Charts", to: currency_path(@conn, :show, @currency, tab: "charts"), class: "nav-link #{if(@conn.params["tab"] == "charts", do: "active")}" %>
+  <% end %>
+  <%= content_tag :li, class: "nav-item" do %>
+    <%= link "Social", to: currency_path(@conn, :show, @currency, tab: "social"), class: "nav-link #{if(@conn.params["tab"] == "social", do: "active")}" %>
+  <% end %>
+  <%= content_tag :li, class: "nav-item" do %>
+    <%= link "Exchanges", to: currency_path(@conn, :show, @currency, tab: "exchanges"), class: "nav-link #{if(@conn.params["tab"] == "exchanges", do: "active")}" %>
+  <% end %>
+</ul>
+
+<%= case @conn.params["tab"] do
+  "charts" -> render "show_charts.html", assigns
+  "exchanges" -> render "show_exchanges.html", assigns
+  _ -> render "show_overview.html", assigns
+end %>

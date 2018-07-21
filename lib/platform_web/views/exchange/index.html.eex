@@ -1,0 +1,41 @@
+<table class="table table-reponsive">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th># of currencies</th>
+      <th>Website url</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exchange <- @exchanges do %>
+    <tr>
+      <td><%= link exchange.name, to: exchange_path(@conn, :show, exchange) %></td>
+      <td><%= exchange.country %></td>
+      <td><%= exchange.exchange_currencies %></td>
+      <td><%= exchange.website_url %></td>
+      <td>
+        <%= if exchange.auto_managed do %>
+          <%= fa_icon("bolt text-warning") %>
+        <% else %>
+          <%=fa_icon("bolt text-muted") %>
+        <% end %>
+      </td>
+      <td class="text-right">
+        <%= if can?(@conn, :edit, exchange) do %>
+          <%= dropdown_options do %>
+            <%= link "Edit", to: exchange_path(@conn, :edit, exchange), class: "dropdown-item" %>
+            <%= link "Delete", to: exchange_path(@conn, :delete, exchange), method: :delete, data: [confirm: "Are you sure?"], class: "dropdown-item text-danger" %>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= if can?(@conn, :new, Exchange) do %>
+  <span><%= link "New Exchange", to: exchange_path(@conn, :new) %></span>
+<% end %>
